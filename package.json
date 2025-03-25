@@ -1,0 +1,38 @@
+{
+  "name": "gemini-agents",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "datastax",
+    "astradb"
+  ],
+  "license": "MIT",
+  "author": "Phil Nash <phil.nash@datastax> (https://datastax.com)",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npm run build:clean && tsc",
+    "build:clean": "rm -rf dist",
+    "build:check": "tsc --noEmit",
+    "build:watch": "tsc --watch",
+    "check": "npm run lint && npm run format:check && npm run build:check",
+    "format": "prettier --write ./src",
+    "format:check": "prettier --check ./src",
+    "lint": "eslint ./src",
+    "start": "node --no-deprecation dist/index.js",
+    "dev": "tsx --no-deprecation --env-file=.env --watch ./bin/agent.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.20.0",
+    "@types/node": "^22.13.4",
+    "eslint": "^9.20.1",
+    "globals": "^15.15.0",
+    "prettier": "^3.5.1",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.24.1"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.0"
+  }
+}
