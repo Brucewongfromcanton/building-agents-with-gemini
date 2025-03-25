@@ -40,7 +40,30 @@ export async function main(args: string[]) {
     }
     try {
       // Let's implement the bot logic here
-      output.write(`[Echo]: ${userInput}\n`);
+      const result = await bot.sendMessage(userInput);
+      const response = result.response;
+      output.write(response.text());
+
+      let functionCalls = response.functionCalls();
+      while (functionCalls && functionCalls.length > 0){
+        const functionResponses = await Promise.all(
+          functionCalls.map(async (call)=> {
+            const {name, args} = call;
+            const response = await functions[name](args);
+            return {
+              functionResponse:{
+                name,
+                response,
+              }
+            }
+          }
+         )
+        )
+        const newResult = await bot.sendMessage(functionResponses);
+        const newResponse = await newResult.response;
+        output.write(newResponse.text());
+        functionCalls = newResponse.functionCalls();
+      }
 
       userInput = await readline.question("\n> ");
     } catch (error) {
